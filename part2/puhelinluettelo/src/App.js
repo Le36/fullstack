@@ -2,14 +2,16 @@ import {useEffect, useState} from 'react'
 import personService from "./services/persons"
 
 
-const Persons = ({newFilter, persons}) => {
+const Persons = ({newFilter, persons, remove}) => {
     return (
         <>
             <ul>
                 {persons.filter(person => {
                     return person.name.toLowerCase().includes(newFilter.toLowerCase())
-                }).map((person) =>
-                    <li key={person.name}>{person.name} {person.number}</li>
+                }).map(({id, name, number}) =>
+                    <li key={name}>{name} {number}
+                        <button onClick={() => remove({id: id, name: name})}>delete</button>
+                    </li>
                 )}
             </ul>
         </>
@@ -70,6 +72,14 @@ const App = () => {
         })
     }
 
+    const removePerson = ({id, name}) => {
+        if (window.confirm(`Delete ${name}?`))
+            personService.remove(id).then(() => {
+                setPersons(persons.filter(person => person.id !== id))
+            })
+    }
+
+
     const handleNameChange = ({target}) => setNewName(target.value)
     const handleNumberChange = ({target}) => setNewNumber(target.value)
     const handleFilterChange = ({target}) => setNewFilter(target.value)
@@ -82,7 +92,7 @@ const App = () => {
             <PersonForm onSubmit={addNew} value={newName} onChange={handleNameChange} value1={newNumber}
                         onChange1={handleNumberChange}/>
             <h2>Numbers</h2>
-            <Persons persons={persons} newFilter={newFilter}></Persons>
+            <Persons persons={persons} newFilter={newFilter} remove={removePerson}></Persons>
         </div>
     )
 
