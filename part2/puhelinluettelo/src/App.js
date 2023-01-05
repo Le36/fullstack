@@ -70,13 +70,17 @@ const App = () => {
                     .then(returnedPerson => {
                         setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
                         setErrorMessage(`Updated ${newName} number successfully`)
-                    })
+                    }).catch(() => {
+                    setErrorMessage(`error: Cannot update ${newName}, their data has been deleted already`)
+                })
             }
 
         } else {
             personService.create(personObject).then(returnedPerson => {
                 setPersons(persons.concat(returnedPerson))
                 setErrorMessage(`Added ${returnedPerson.name} successfully`)
+            }).catch(() => {
+                setErrorMessage(`error: cant add`)
             })
         }
         setNewName("")
@@ -91,6 +95,8 @@ const App = () => {
             personService.remove(id).then(() => {
                 setPersons(persons.filter(person => person.id !== id))
                 setErrorMessage(`Deleted ${name} successfully`)
+            }).catch(() => {
+                setErrorMessage(`error: was already deleted`)
             })
         setTimeout(() => {
             setErrorMessage(null)

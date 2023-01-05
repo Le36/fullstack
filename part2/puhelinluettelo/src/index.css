@@ -1,4 +1,14 @@
 .error {
+    color: #be0808;
+    background: lightgrey;
+    font-size: 20px;
+    border-style: solid;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.info {
     color: #2f8910;
     background: lightgrey;
     font-size: 20px;
