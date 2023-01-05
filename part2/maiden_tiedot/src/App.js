@@ -1,13 +1,35 @@
 import axios from "axios";
 import {useEffect, useState} from "react";
 
-const Country = ({data: {name, capital, area, languages, flags: {png}}}) => {
+const Weather = ({capital, coordinates: [lat, lng]}) => {
+    const [newWeather, setNewWeather] = useState([])
+    const hook = () => {
+        axios
+            .get(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true`)
+            .then(response => {
+                setNewWeather(response.data)
+            })
+    }
+    useEffect(hook, [lat, lng])
+    if (newWeather.length === 0) return
+    return (
+        <div>
+            <h2>Weather in {capital}</h2>
+            temperature {newWeather.current_weather.temperature} Celsius
+            <br/>weather code: {newWeather.current_weather.weathercode}
+            <br/>wind {newWeather.current_weather.windspeed} m/s
+        </div>
+    )
+}
+
+const Country = ({data: {name, capital, area, languages, flags: {png}, latlng}}) => {
     return (
         <div>
             <Title name={name.common} area={area} capital={capital}/>
             <h2>languages</h2>
             <Languages languages={languages}/>
             <img src={png} alt="Flag"/>
+            <Weather capital={capital} coordinates={latlng}/>
         </div>
     )
 }
