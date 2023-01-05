@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react'
 import personService from "./services/persons"
-
+import Notification from "./components/Notification";
+import './index.css'
 
 const Persons = ({newFilter, persons, remove}) => {
     return (
@@ -54,6 +55,7 @@ const App = () => {
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
     const [newFilter, setNewFilter] = useState('')
+    const [errorMessage, setErrorMessage] = useState(null)
 
     const addNew = (event) => {
         event.preventDefault()
@@ -67,23 +69,32 @@ const App = () => {
                 personService.update(id, personObject)
                     .then(returnedPerson => {
                         setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
+                        setErrorMessage(`Updated ${newName} number successfully`)
                     })
             }
 
         } else {
             personService.create(personObject).then(returnedPerson => {
                 setPersons(persons.concat(returnedPerson))
+                setErrorMessage(`Added ${returnedPerson.name} successfully`)
             })
         }
         setNewName("")
         setNewNumber("")
+        setTimeout(() => {
+            setErrorMessage(null)
+        }, 4000)
     }
 
     const removePerson = ({id, name}) => {
         if (window.confirm(`Delete ${name}?`))
             personService.remove(id).then(() => {
                 setPersons(persons.filter(person => person.id !== id))
+                setErrorMessage(`Deleted ${name} successfully`)
             })
+        setTimeout(() => {
+            setErrorMessage(null)
+        }, 4000)
     }
 
 
@@ -94,6 +105,7 @@ const App = () => {
     return (
         <div>
             <h2>Phonebook</h2>
+            <Notification message={errorMessage}/>
             <Filter value={newFilter} onChange={handleFilterChange}/>
             <h2>Add a new</h2>
             <PersonForm onSubmit={addNew} value={newName} onChange={handleNameChange} value1={newNumber}
