@@ -36,14 +36,19 @@ const initialBlogs = [
 ]
 
 const singleBlog = {
-        _id: "5a422b331b54a476434d17fa",
-        title: 'test_blog_can_be_added',
-        author: 'Michael_Scarn',
-        url: 'https://testpatterns.com/',
-        likes: 2
-    }
+    _id: "5a422b331b54a476434d17fa",
+    title: 'test_blog_can_be_added',
+    author: 'Michael_Scarn',
+    url: 'https://testpatterns.com/',
+    likes: 2
+}
 
-
+const withoutLikes = {
+    _id: "5a422ba31b54a476434d17ca",
+    title: 'test_blog_without_likes',
+    author: 'no_likeys',
+    url: 'https://nolikes.com/'
+}
 
 const blogsInDb = async () => {
     const blogs = await Blog.find({})
@@ -51,5 +56,5 @@ const blogsInDb = async () => {
 }
 
 module.exports = {
-    initialBlogs, singleBlog, blogsInDb
+    initialBlogs, singleBlog, blogsInDb, withoutLikes
 }
