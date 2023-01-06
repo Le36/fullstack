@@ -56,6 +56,17 @@ test('a valid blog can be added ', async () => {
     expect(contents).toContain('test_blog_can_be_added')
 })
 
+test('without url and title cannot be added', async () => {
+    await api
+        .post('/api/blogs')
+        .send(helper.withoutUrlAndTitle)
+        .expect(400)
+        .expect('Content-Type', /application\/json/)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+})
+
 afterAll(() => {
     mongoose.connection.close()
 })

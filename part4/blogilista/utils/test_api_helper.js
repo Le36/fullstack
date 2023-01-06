@@ -50,11 +50,17 @@ const withoutLikes = {
     url: 'https://nolikes.com/'
 }
 
+const withoutUrlAndTitle = {
+    _id: "1a122ba31b54a413534d17ca",
+    author: 'not_much_info',
+    likes: 2
+}
+
 const blogsInDb = async () => {
     const blogs = await Blog.find({})
     return blogs.map(blog => blog.toJSON())
 }
 
 module.exports = {
-    initialBlogs, singleBlog, blogsInDb, withoutLikes
+    initialBlogs, singleBlog, blogsInDb, withoutLikes, withoutUrlAndTitle
 }
