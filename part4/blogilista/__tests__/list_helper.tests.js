@@ -95,6 +95,18 @@ describe('most liked out of multiple', () => {
     })
 })
 
+describe('most blogs from one author', () => {
+    test('when list has only one blog equals the likes of that', () => {
+        const result = listHelper.mostBlogs(listWithOneBlog)
+        expect(result).toEqual({author: 'Edsger W. Dijkstra', blogs: 1})
+    })
+
+    test('correct when many blogs', () => {
+        const result = listHelper.mostBlogs(listWithManyBlogs)
+        expect(result).toEqual({author: 'Robert C. Martin', blogs: 3})
+    })
+})
+
 describe('total likes', () => {
     test('when list has only one blog equals the likes of that', () => {
         const result = listHelper.totalLikes(listWithOneBlog)
