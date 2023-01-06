@@ -84,6 +84,34 @@ test('blog can be removed', async () => {
     expect(contents).not.toContain(blogToDelete.title)
 })
 
+test('single blog can be updated', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogBeforeUpdate = blogsAtStart[0]
+    const blogToUpdate = {
+        title: 'newTitle',
+        author: 'andNewAuthor',
+        url: blogBeforeUpdate.url,
+        likes: blogBeforeUpdate.likes,
+        _id: blogBeforeUpdate.id
+    }
+
+    const response = await api
+        .put(`/api/blogs/${blogBeforeUpdate.id}`)
+        .send(blogToUpdate)
+
+
+    expect(response.body.title).toBe('newTitle')
+    expect(response.body.url).toBe(blogBeforeUpdate.url)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+
+    const contents = blogsAtEnd.map(r => r.title)
+
+    expect(contents).toContain(blogToUpdate.title)
+    expect(contents).not.toContain(blogBeforeUpdate.title)
+})
+
 afterAll(() => {
     mongoose.connection.close()
 })
