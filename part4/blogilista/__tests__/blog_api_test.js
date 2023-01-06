@@ -72,10 +72,58 @@ describe('when there is initially one user at db', () => {
     })
 })
 
-describe('when there is initially 6 blogs at db', () => {
+describe('without token cannot add blog', () => {
     beforeEach(async () => {
         await Blog.deleteMany({})
         await Blog.insertMany(helper.initialBlogs)
+    })
+
+    test('blog cnanot be added', async () => {
+        await api
+            .post('/api/blogs')
+            .send(helper.singleBlog)
+            .expect(401)
+            .expect('Content-Type', /application\/json/)
+
+        const blogsAtEnd = await helper.blogsInDb()
+        expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+
+        const contents = blogsAtEnd.map(n => n.title)
+        expect(contents).not.toContain('test_blog_can_be_added')
+    })
+})
+
+describe('when there is initially 6 blogs at db', () => {
+
+    let token = null
+
+    beforeEach(async () => {
+        await Blog.deleteMany({})
+        await Blog.insertMany(helper.initialBlogs)
+        await User.deleteMany({})
+
+        const newUser = {
+            username: 'root',
+            name: 'Mr.Roboto',
+            password: 'r00t',
+        }
+
+        const login = {
+            username: 'root',
+            password: 'r00t'
+        }
+
+        await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(201)
+
+        const response = await api
+            .post('/api/login')
+            .send(login)
+            .expect(200)
+
+        token = response.body.token
     })
 
     test('blogs are returned as json', async () => {
@@ -102,6 +150,7 @@ describe('when there is initially 6 blogs at db', () => {
         const response = await api
             .post('/api/blogs')
             .send(helper.withoutLikes)
+            .set({Authorization: `Bearer ${token}`})
             .expect(200)
             .expect('Content-Type', /application\/json/)
 
@@ -113,6 +162,7 @@ describe('when there is initially 6 blogs at db', () => {
         await api
             .post('/api/blogs')
             .send(helper.singleBlog)
+            .set({Authorization: `Bearer ${token}`})
             .expect(200)
             .expect('Content-Type', /application\/json/)
 
@@ -127,6 +177,7 @@ describe('when there is initially 6 blogs at db', () => {
         await api
             .post('/api/blogs')
             .send(helper.withoutUrlAndTitle)
+            .set({Authorization: `Bearer ${token}`})
             .expect(400)
             .expect('Content-Type', /application\/json/)
 
@@ -135,20 +186,28 @@ describe('when there is initially 6 blogs at db', () => {
     })
 
     test('blog can be removed', async () => {
-        const blogsAtStart = await helper.blogsInDb()
-        const blogToDelete = blogsAtStart[0]
+        const newBlog = {
+            title: "new",
+            url: "newer"
+        }
+        const response = await api
+            .post("/api/blogs")
+            .send(newBlog)
+            .set({Authorization: `Bearer ${token}`})
+            .expect(200)
+
+        const blog = response.body
 
         await api
-            .delete(`/api/blogs/${blogToDelete.id}`)
+            .delete(`/api/blogs/${blog.id}`)
             .send(helper.withoutUrlAndTitle)
+            .set({Authorization: `Bearer ${token}`})
             .expect(204)
 
         const blogsAtEnd = await helper.blogsInDb()
-        expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1)
-
+        expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
         const contents = blogsAtEnd.map(r => r.title)
-
-        expect(contents).not.toContain(blogToDelete.title)
+        expect(contents).not.toContain(blog.title)
     })
 
     test('single blog can be updated', async () => {
