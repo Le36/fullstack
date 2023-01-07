@@ -43,13 +43,14 @@ describe('Blog app', function () {
         })
     })
 
-    describe.only('blog can be liked', function () {
+    describe('blog can be liked', function () {
         beforeEach(function () {
             cy.login({username: 'name', password: 'pass'})
             cy.createBlog({
                 title: 'this is title',
                 author: 'this is author',
-                url: 'this is url'
+                url: 'this is url',
+                likes: 0
             })
         })
 
@@ -70,5 +71,62 @@ describe('Blog app', function () {
             cy.contains('successfully removed blog!')
             cy.get('html').should('not.contain', 'this is title this is author')
         })
+    })
+
+    describe('blogs are sorted by likes', function () {
+        beforeEach(function () {
+            cy.login({username: 'name', password: 'pass'})
+            cy.createBlog({
+                title: 'good book',
+                author: 'this is author',
+                url: 'this is url',
+                likes: 15
+            })
+            cy.createBlog({
+                title: 'learning reakt',
+                author: 'author',
+                url: 'this is url',
+                likes: 14
+            })
+            cy.createBlog({
+                title: 'leastLikes',
+                author: 'this is author',
+                url: 'this is url',
+                likes: 0
+            })
+            cy.createBlog({
+                title: 'mostLikes',
+                author: 'yes',
+                url: 'this is url',
+                likes: 18
+            })
+            cy.createBlog({
+                title: 'i have 6 likes',
+                author: 'this is author',
+                url: 'this is url',
+                likes: 6
+            })
+        })
+
+        it('blogs are sorted by likes', function () {
+            cy.get('#root > :nth-child(1) > :nth-child(4)').contains('mostLikes')
+            cy.get('#root > :nth-child(1) > :nth-child(5)').contains('good book')
+            cy.get('#root > :nth-child(1) > :nth-child(6)').contains('learning reakt')
+            cy.get('#root > :nth-child(1) > :nth-child(7)').contains('i have 6 likes')
+            cy.get('#root > :nth-child(1) > :nth-child(8)').contains('leastLikes')
+        })
+
+        it('order correct even after manual liking', function () {
+            cy.get(':nth-child(6) > button').click()
+            cy.contains('like').click()
+            cy.contains('like').click()
+            cy.contains('hide').click()
+            cy.get('#root > :nth-child(1) > :nth-child(4)').contains('mostLikes')
+            cy.get('#root > :nth-child(1) > :nth-child(5)').contains('learning reakt')
+            cy.get('#root > :nth-child(1) > :nth-child(6)').contains('good book')
+            cy.get('#root > :nth-child(1) > :nth-child(7)').contains('i have 6 likes')
+            cy.get('#root > :nth-child(1) > :nth-child(8)').contains('leastLikes')
+        })
+
     })
 })
