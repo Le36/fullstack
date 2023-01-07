@@ -70,10 +70,6 @@ const App = () => {
         try {
             const returnedBlog = await blogService.update(updatedBlog)
             setBlogs(blogs.map(blog => blog.id !== updatedBlog.id ? blog : returnedBlog))
-            setErrorMessage('new like added successfully!')
-            setTimeout(() => {
-                setErrorMessage(null)
-            }, 1000)
         } catch (exception) {
             setErrorMessage('failed to like blog!')
             setTimeout(() => {
@@ -123,7 +119,8 @@ const App = () => {
             <Togglable buttonLabel={'new blog'} ref={blogFormRef}>
                 <BlogForm createBlog={addBlog}></BlogForm>
             </Togglable>
-            {blogs.map(blog =>
+
+            {blogs.sort((a, b) => b.likes - a.likes).map(blog =>
                 <Blog key={blog.id} receivedBlog={blog} updateLike={addLike}/>
             )}
         </div>
