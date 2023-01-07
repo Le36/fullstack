@@ -7,7 +7,6 @@ import Blog from './components/Blog'
 
 const App = () => {
     const [blogs, setBlogs] = useState([])
-
     const [errorMessage, setErrorMessage] = useState(null)
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
@@ -113,7 +112,6 @@ const App = () => {
             )}
         </div>
     )
-
 }
 
 export default App
