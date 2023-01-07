@@ -21,5 +21,20 @@ const create = async newBlog => {
     return response.data
 }
 
-const blogService = {getAll, create, setToken}
+const update = (newObject) => {
+    const properFormat = {
+        user: newObject.user.id,
+        likes: newObject.likes,
+        author: newObject.author,
+        title: newObject.title,
+        url: newObject.url,
+        _id: newObject.id
+    }
+    console.log(newObject)
+    console.log(properFormat)
+    const request = axios.put(`${baseUrl}/${newObject.id}`, properFormat)
+    return request.then(response => response.data)
+}
+
+const blogService = {getAll, create, setToken, update}
 export default blogService
