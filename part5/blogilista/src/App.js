@@ -48,18 +48,22 @@ const App = () => {
         }
     }
 
-    const addBlog = (event) => {
+    const addBlog = async (event) => {
         event.preventDefault()
-        blogService
-            .create(newBlog)
-            .then(returnedBlog => {
-                setBlogs(blogs.concat(returnedBlog))
-                setNewBlog({title: '', author: '', url: ''})
-            })
-        setErrorMessage('new blog added successfully!')
-        setTimeout(() => {
-            setErrorMessage(null)
-        }, 5000)
+        try {
+            const returnedBlog = await blogService.create(newBlog)
+            setBlogs(blogs.concat(returnedBlog))
+            setNewBlog({title: '', author: '', url: ''})
+            setErrorMessage('new blog added successfully!')
+            setTimeout(() => {
+                setErrorMessage(null)
+            }, 5000)
+        } catch (exception) {
+            setErrorMessage('failed to add new blog!')
+            setTimeout(() => {
+                setErrorMessage(null)
+            }, 5000)
+        }
     }
 
     const loginForm = () => (
