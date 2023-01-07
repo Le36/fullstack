@@ -1,6 +1,6 @@
 import {useState} from "react";
 
-const Blog = ({receivedBlog, updateLike}) => {
+const Blog = ({receivedBlog, updateLike, user, remove}) => {
 
     const [view, setView] = useState(false)
     const [blog, setBlog] = useState(receivedBlog)
@@ -21,7 +21,30 @@ const Blog = ({receivedBlog, updateLike}) => {
         setBlog(updatedLikeBlog)
     }
 
+    const deleteBlog = (event) => {
+        event.preventDefault()
+        if (window.confirm('are you sure u want to delete this blog?')) {
+            remove(blog)
+        }
+    }
+
     if (view) {
+        if (user.username === blog.user.username) {
+            return (
+                <div style={blogStyle}>
+                    {blog.title} {blog.author}
+                    <button onClick={() => setView(false)}>hide</button>
+                    <p> {blog.url} </p>
+                    <p>Likes: {blog.likes}
+                        <button onClick={addLike}>like</button>
+                    </p>
+                    <p>{(blog.user.username)}</p>
+                    <p>
+                        <button onClick={deleteBlog}>delete</button>
+                    </p>
+                </div>
+            )
+        }
         return (
             <div style={blogStyle}>
                 {blog.title} {blog.author}

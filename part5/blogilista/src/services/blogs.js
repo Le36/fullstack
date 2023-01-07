@@ -30,11 +30,18 @@ const update = (newObject) => {
         url: newObject.url,
         _id: newObject.id
     }
-    console.log(newObject)
-    console.log(properFormat)
     const request = axios.put(`${baseUrl}/${newObject.id}`, properFormat)
     return request.then(response => response.data)
 }
 
-const blogService = {getAll, create, setToken, update}
+const remove = async (newObject) => {
+    const config = {
+        headers: {Authorization: token},
+    }
+
+    const request = await axios.delete(`${baseUrl}/${newObject.id}`, config)
+    return request.data
+}
+
+const blogService = {getAll, create, setToken, update, remove}
 export default blogService

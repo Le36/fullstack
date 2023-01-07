@@ -78,6 +78,22 @@ const App = () => {
         }
     }
 
+    const removeBlog = async (removable) => {
+        try {
+            await blogService.remove(removable)
+            setBlogs(blogs.filter(blog => blog.id !== removable.id))
+            setErrorMessage('successfully removed blog!')
+            setTimeout(() => {
+                setErrorMessage(null)
+            }, 5000)
+        } catch (exception) {
+            setErrorMessage('failed to remove blog!')
+            setTimeout(() => {
+                setErrorMessage(null)
+            }, 5000)
+        }
+    }
+
     const loginForm = () => (
         <form onSubmit={handleLogin}>
             <div>
@@ -119,9 +135,8 @@ const App = () => {
             <Togglable buttonLabel={'new blog'} ref={blogFormRef}>
                 <BlogForm createBlog={addBlog}></BlogForm>
             </Togglable>
-
             {blogs.sort((a, b) => b.likes - a.likes).map(blog =>
-                <Blog key={blog.id} receivedBlog={blog} updateLike={addLike}/>
+                <Blog key={blog.id} receivedBlog={blog} updateLike={addLike} user={user} remove={removeBlog}/>
             )}
         </div>
     )
