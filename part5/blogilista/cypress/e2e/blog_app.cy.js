@@ -28,7 +28,7 @@ describe('Blog app', function () {
         })
     })
 
-    describe.only('When logged in', function () {
+    describe('When logged in', function () {
         beforeEach(function () {
             cy.login({username: 'name', password: 'pass'})
         })
@@ -40,6 +40,35 @@ describe('Blog app', function () {
             cy.get('#urlInput').type('www.blog.com')
             cy.contains('save').click()
             cy.contains('title of blog i am author')
+        })
+    })
+
+    describe.only('blog can be liked', function () {
+        beforeEach(function () {
+            cy.login({username: 'name', password: 'pass'})
+            cy.createBlog({
+                title: 'this is title',
+                author: 'this is author',
+                url: 'this is url'
+            })
+        })
+
+        it('A blog can be liked', function () {
+            cy.contains('this is title this is author')
+            cy.contains('view').click()
+            cy.contains('Likes: 0')
+            cy.contains('like').click()
+            cy.contains('Likes: 1')
+            cy.contains('like').click()
+            cy.contains('Likes: 2')
+        })
+
+        it('A blog can be deleted', function () {
+            cy.contains('this is title this is author')
+            cy.contains('view').click()
+            cy.contains('delete').click()
+            cy.contains('successfully removed blog!')
+            cy.get('html').should('not.contain', 'this is title this is author')
         })
     })
 })
