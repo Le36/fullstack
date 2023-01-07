@@ -1,11 +1,11 @@
-import {useState} from "react";
-import PropTypes from 'prop-types';
+import {useState} from 'react'
+import PropTypes from 'prop-types'
 
 const BlogForm = ({createBlog}) => {
     const [newBlog, setNewBlog] = useState({title: '', author: '', url: ''})
 
     const handleBlogChange = (field, {target}) => {
-        setNewBlog({...(newBlog), [field]: target.value});
+        setNewBlog({...(newBlog), [field]: target.value})
     }
 
     const addBlog = (event) => {
