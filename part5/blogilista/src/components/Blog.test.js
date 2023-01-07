@@ -47,3 +47,26 @@ test('show all when view is pressed', async () => {
     screen.getByText('namePart', {exact: false})
     screen.getByText('likes', {exact: false})
 })
+
+test('if like is pressed twice, addLike is called twice', async () => {
+    const blog = {
+        author: 'authorPart',
+        title: 'titlePart',
+        url: 'urlPart',
+        user: {
+            username: 'namePart'
+        }
+    }
+    const mockHandler = jest.fn()
+    const likeMockHandler = jest.fn()
+
+    render(<Blog receivedBlog={blog} updateLike={likeMockHandler} user={mockHandler} remove={mockHandler}/>)
+
+    const user = userEvent.setup()
+    const viewButton = screen.getByText('view')
+    await user.click(viewButton)
+
+    const likeButton = screen.getByText('like')
+    await user.dblClick(likeButton)
+    expect(likeMockHandler.mock.calls).toHaveLength(2)
+})
