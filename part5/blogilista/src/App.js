@@ -56,6 +56,10 @@ const App = () => {
                 setBlogs(blogs.concat(returnedBlog))
                 setNewBlog({title: '', author: '', url: ''})
             })
+        setErrorMessage('new blog added successfully!')
+        setTimeout(() => {
+            setErrorMessage(null)
+        }, 5000)
     }
 
     const loginForm = () => (
