@@ -72,6 +72,12 @@ const CreateNew = ({addNew, notification}) => {
         setSent(true)
     }
 
+    const reset = () => {
+        content.reset()
+        author.reset()
+        info.reset()
+    }
+
     if (sent) return <Navigate replace to="/"/>
 
     return (
@@ -92,6 +98,7 @@ const CreateNew = ({addNew, notification}) => {
                 </div>
                 <button>create</button>
             </form>
+            <button onClick={() => reset()}>reset</button>
         </div>
     )
 
