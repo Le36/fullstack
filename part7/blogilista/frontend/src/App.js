@@ -8,6 +8,8 @@ import {useDispatch, useSelector} from 'react-redux'
 import {initializeBlogs} from './reducers/blogReducer'
 import LoginForm from './components/LoginForm'
 import {removeUser} from './reducers/userReducer'
+import UserStatList from "./components/UserStatList";
+import {initializeStats} from "./reducers/statsReducer";
 
 const App = () => {
 	const dispatch = useDispatch()
@@ -16,6 +18,11 @@ const App = () => {
 	useEffect(() => {
 		dispatch(initializeBlogs())
 	}, [dispatch])
+
+	useEffect(() => {
+		dispatch(initializeStats())
+	}, [dispatch])
+
 
 	if (!user) {
 		return (
@@ -28,6 +35,7 @@ const App = () => {
 
 	return (
 		<div>
+			<UserStatList/>
 			<Notification />
 			<h2>blogs</h2>
 			<p>

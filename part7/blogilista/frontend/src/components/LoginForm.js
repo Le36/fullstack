@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react'
 import blogService from '../services/blogService'
 import {useDispatch} from 'react-redux'
 import {setUser} from '../reducers/userReducer'
-import loginService from '../services/login'
+import loginService from '../services/loginService'
 import {setNotification} from '../reducers/notificationReducer'
 
 const LoginForm = () => {
