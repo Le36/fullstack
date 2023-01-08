@@ -1,7 +1,10 @@
 import {useState} from 'react'
 import PropTypes from 'prop-types'
+import {useDispatch} from 'react-redux'
+import {createBlog} from '../reducers/blogReducer'
 
-const BlogForm = ({createBlog}) => {
+const BlogForm = ({toggleVisibility}) => {
+	const dispatch = useDispatch()
 	const [newBlog, setNewBlog] = useState({title: '', author: '', url: ''})
 
 	const handleBlogChange = (field, {target}) => {
@@ -10,9 +13,9 @@ const BlogForm = ({createBlog}) => {
 
 	const addBlog = (event) => {
 		event.preventDefault()
-		createBlog(newBlog)
-
+		dispatch(createBlog(newBlog))
 		setNewBlog({title: '', author: '', url: ''})
+		toggleVisibility()
 	}
 
 	return (

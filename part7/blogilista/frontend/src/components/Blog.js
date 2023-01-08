@@ -1,6 +1,10 @@
 import {useState} from 'react'
+import {useDispatch} from 'react-redux'
+import {likeBlog} from '../reducers/blogReducer'
 
-const Blog = ({receivedBlog, updateLike, user, remove}) => {
+const Blog = ({receivedBlog, user, remove}) => {
+	const dispatcher = useDispatch()
+
 	const [view, setView] = useState(false)
 	const [blog, setBlog] = useState(receivedBlog)
 
@@ -16,7 +20,7 @@ const Blog = ({receivedBlog, updateLike, user, remove}) => {
 		event.preventDefault()
 		const updatedLikeBlog = {...blog, likes: blog.likes + 1}
 
-		updateLike(updatedLikeBlog)
+		dispatcher(likeBlog(updatedLikeBlog))
 		setBlog(updatedLikeBlog)
 	}
 

@@ -1,15 +1,20 @@
-import {useEffect, useRef, useState} from 'react'
-import blogService from './services/blogs'
+import {useEffect, useState} from 'react'
+import blogService from './services/blogService'
 import loginService from './services/login'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
-import Blog from './components/Blog'
+import BlogList from './components/BlogList'
 import Notification from './components/Notification'
 import {useDispatch} from 'react-redux'
 import {setNotification} from './reducers/notificationReducer'
+import {initializeBlogs} from './reducers/blogReducer'
 
 const App = () => {
 	const dispatch = useDispatch()
+
+	useEffect(() => {
+		dispatch(initializeBlogs())
+	}, [dispatch])
 
 	const [blogs, setBlogs] = useState([])
 	const [username, setUsername] = useState('')
@@ -47,7 +52,6 @@ const App = () => {
 	}
 
 	const addBlog = async (newBlogObject) => {
-		blogFormRef.current.toggleVisibility()
 		try {
 			const returnedBlog = await blogService.create(newBlogObject)
 			setBlogs(blogs.concat(returnedBlog))
@@ -104,8 +108,6 @@ const App = () => {
 		</form>
 	)
 
-	const blogFormRef = useRef()
-
 	if (user === null) {
 		return (
 			<div>
@@ -129,14 +131,10 @@ const App = () => {
 					logout
 				</button>
 			</p>
-			<Togglable buttonLabel={'new blog'} ref={blogFormRef}>
-				<BlogForm createBlog={addBlog}></BlogForm>
+			<Togglable buttonLabel={'new blog'}>
+				{({toggleVisibility}) => <BlogForm toggleVisibility={toggleVisibility} />}
 			</Togglable>
-			{blogs
-				.sort((a, b) => b.likes - a.likes)
-				.map((blog) => (
-					<Blog key={blog.id} receivedBlog={blog} updateLike={addLike} user={user} remove={removeBlog} />
-				))}
+			<BlogList />
 		</div>
 	)
 }
