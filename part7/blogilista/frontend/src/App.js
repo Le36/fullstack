@@ -4,10 +4,14 @@ import loginService from './services/login'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
 import Blog from './components/Blog'
+import Notification from './components/Notification'
+import {useDispatch} from 'react-redux'
+import {setNotification} from './reducers/notificationReducer'
 
 const App = () => {
+	const dispatch = useDispatch()
+
 	const [blogs, setBlogs] = useState([])
-	const [errorMessage, setErrorMessage] = useState(null)
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
 	const [user, setUser] = useState(null)
@@ -38,10 +42,7 @@ const App = () => {
 			setUsername('')
 			setPassword('')
 		} catch (exception) {
-			setErrorMessage('wrong credentials')
-			setTimeout(() => {
-				setErrorMessage(null)
-			}, 5000)
+			dispatch(setNotification('wrong credentials', 5))
 		}
 	}
 
@@ -50,15 +51,9 @@ const App = () => {
 		try {
 			const returnedBlog = await blogService.create(newBlogObject)
 			setBlogs(blogs.concat(returnedBlog))
-			setErrorMessage('new blog added successfully!')
-			setTimeout(() => {
-				setErrorMessage(null)
-			}, 5000)
+			dispatch(setNotification('new blog added successfully!', 5))
 		} catch (exception) {
-			setErrorMessage('failed to add new blog!')
-			setTimeout(() => {
-				setErrorMessage(null)
-			}, 5000)
+			dispatch(setNotification('failed to add blog!', 5))
 		}
 	}
 
@@ -67,10 +62,7 @@ const App = () => {
 			const returnedBlog = await blogService.update(updatedBlog)
 			setBlogs(blogs.map((blog) => (blog.id !== updatedBlog.id ? blog : returnedBlog)))
 		} catch (exception) {
-			setErrorMessage('failed to like blog!')
-			setTimeout(() => {
-				setErrorMessage(null)
-			}, 5000)
+			dispatch(setNotification('failed to like blog!', 5))
 		}
 	}
 
@@ -78,15 +70,9 @@ const App = () => {
 		try {
 			await blogService.remove(removable)
 			setBlogs(blogs.filter((blog) => blog.id !== removable.id))
-			setErrorMessage('successfully removed blog!')
-			setTimeout(() => {
-				setErrorMessage(null)
-			}, 5000)
+			dispatch(setNotification('successfully removed blog!', 5))
 		} catch (exception) {
-			setErrorMessage('failed to remove blog!')
-			setTimeout(() => {
-				setErrorMessage(null)
-			}, 5000)
+			dispatch(setNotification('failed to remove blog!', 5))
 		}
 	}
 
@@ -123,7 +109,7 @@ const App = () => {
 	if (user === null) {
 		return (
 			<div>
-				{errorMessage}
+				<Notification />
 				<h2>Log in to application</h2>
 				{loginForm()}
 			</div>
@@ -131,7 +117,7 @@ const App = () => {
 	}
 	return (
 		<div>
-			{errorMessage}
+			<Notification />
 			<h2>blogs</h2>
 			<p>
 				{user.name} logged in
