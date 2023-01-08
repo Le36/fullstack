@@ -13,7 +13,6 @@ const createNew = async (content) => {
     return response.data
 }
 
-export default {
-    getAll,
-    createNew,
-}
+const anecdoteService = {getAll, createNew}
+
+export default anecdoteService
