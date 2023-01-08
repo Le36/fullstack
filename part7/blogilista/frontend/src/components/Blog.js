@@ -1,8 +1,8 @@
 import {useState} from 'react'
 import {useDispatch} from 'react-redux'
-import {likeBlog} from '../reducers/blogReducer'
+import {likeBlog, removeBlog} from '../reducers/blogReducer'
 
-const Blog = ({receivedBlog, user, remove}) => {
+const Blog = ({receivedBlog, user}) => {
 	const dispatcher = useDispatch()
 
 	const [view, setView] = useState(false)
@@ -27,12 +27,12 @@ const Blog = ({receivedBlog, user, remove}) => {
 	const deleteBlog = (event) => {
 		event.preventDefault()
 		if (window.confirm('are you sure u want to delete this blog?')) {
-			remove(blog)
+			dispatcher(removeBlog(blog))
 		}
 	}
 
 	if (view) {
-		if (user.username === blog.user.username) {
+		if (user.username === blog.user.username || user.id === blog.user.id) {
 			return (
 				<div style={blogStyle}>
 					{blog.title} {blog.author}

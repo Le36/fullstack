@@ -16,14 +16,9 @@ const App = () => {
 		dispatch(initializeBlogs())
 	}, [dispatch])
 
-	const [blogs, setBlogs] = useState([])
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
 	const [user, setUser] = useState(null)
-
-	useEffect(() => {
-		blogService.getAll().then((blogs) => setBlogs(blogs))
-	}, [])
 
 	useEffect(() => {
 		const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
@@ -48,35 +43,6 @@ const App = () => {
 			setPassword('')
 		} catch (exception) {
 			dispatch(setNotification('wrong credentials', 5))
-		}
-	}
-
-	const addBlog = async (newBlogObject) => {
-		try {
-			const returnedBlog = await blogService.create(newBlogObject)
-			setBlogs(blogs.concat(returnedBlog))
-			dispatch(setNotification('new blog added successfully!', 5))
-		} catch (exception) {
-			dispatch(setNotification('failed to add blog!', 5))
-		}
-	}
-
-	const addLike = async (updatedBlog) => {
-		try {
-			const returnedBlog = await blogService.update(updatedBlog)
-			setBlogs(blogs.map((blog) => (blog.id !== updatedBlog.id ? blog : returnedBlog)))
-		} catch (exception) {
-			dispatch(setNotification('failed to like blog!', 5))
-		}
-	}
-
-	const removeBlog = async (removable) => {
-		try {
-			await blogService.remove(removable)
-			setBlogs(blogs.filter((blog) => blog.id !== removable.id))
-			dispatch(setNotification('successfully removed blog!', 5))
-		} catch (exception) {
-			dispatch(setNotification('failed to remove blog!', 5))
 		}
 	}
 
@@ -132,9 +98,9 @@ const App = () => {
 				</button>
 			</p>
 			<Togglable buttonLabel={'new blog'}>
-				{({toggleVisibility}) => <BlogForm toggleVisibility={toggleVisibility} />}
+				{({toggleVisibility}) => <BlogForm toggleVisibility={toggleVisibility} user={user} />}
 			</Togglable>
-			<BlogList />
+			<BlogList user={user} />
 		</div>
 	)
 }
