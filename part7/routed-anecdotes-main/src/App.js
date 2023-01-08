@@ -55,9 +55,9 @@ const Footer = () => (
 )
 
 const CreateNew = ({addNew, notification}) => {
-    const content = useField()
-    const author = useField()
-    const info = useField()
+    const [content, resetContent] = useField()
+    const [author, resetAuthor] = useField()
+    const [info, resetInfo] = useField()
     const [sent, setSent] = useState(false)
 
     const handleSubmit = (e) => {
@@ -70,12 +70,6 @@ const CreateNew = ({addNew, notification}) => {
         })
         notification(content.value)
         setSent(true)
-    }
-
-    const reset = () => {
-        content.reset()
-        author.reset()
-        info.reset()
     }
 
     if (sent) return <Navigate replace to="/"/>
@@ -98,7 +92,12 @@ const CreateNew = ({addNew, notification}) => {
                 </div>
                 <button>create</button>
             </form>
-            <button onClick={() => reset()}>reset</button>
+            <button onClick={() => {
+                resetContent()
+                resetAuthor()
+                resetInfo()
+            }}>reset
+            </button>
         </div>
     )
 
