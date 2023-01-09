@@ -12,11 +12,13 @@ import UserStatList from './components/UserStatList'
 import {initializeStats} from './reducers/statsReducer'
 import {Route, Routes, useMatch} from 'react-router-dom'
 import UserView from './components/UserView'
+import BlogView from "./components/BlogView";
 
 const App = () => {
 	const dispatch = useDispatch()
 	const user = useSelector((state) => state.user)
-	const match = useMatch('/users/:id')
+	const userMatch = useMatch('/users/:id')
+	const blogMatch = useMatch('/blogs/:id')
 
 	useEffect(() => {
 		dispatch(initializeBlogs())
@@ -43,14 +45,14 @@ const App = () => {
 	return (
 		<div>
 			<h2>blogs</h2>
-
 			<Notification />
 			<p>
 				{user.name} logged in
 				<button onClick={() => logoutButton()}>logout</button>
 			</p>
 			<Routes>
-				<Route path="/users/:id" element={<UserView id={match ? match.params.id : null} />} />
+				<Route path="/blogs/:id" element={<BlogView id={blogMatch ? blogMatch.params.id : null} />} />
+				<Route path="/users/:id" element={<UserView id={userMatch ? userMatch.params.id : null} />} />
 				<Route path="/users" element={<UserStatList />} />
 				<Route
 					path=""

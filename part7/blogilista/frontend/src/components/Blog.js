@@ -1,8 +1,9 @@
 import {useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {likeBlog, removeBlog} from '../reducers/blogReducer'
+import {Link} from 'react-router-dom'
 
-const Blog = ({receivedBlog}) => {
+const Blog = ({receivedBlog, singleView}) => {
 	const dispatcher = useDispatch()
 	const user = useSelector((state) => state.user)
 	const [view, setView] = useState(false)
@@ -31,24 +32,47 @@ const Blog = ({receivedBlog}) => {
 		}
 	}
 
-	if (view) {
-		if (user.username === blog.user.username || user.id === blog.user.id) {
-			return (
-				<div style={blogStyle}>
+	const padding = {
+		padding: 5,
+	}
+
+	if (singleView) {
+		return (
+			<div style={blogStyle}>
+				<h3>
 					{blog.title} {blog.author}
-					<button onClick={() => setView(false)}>hide</button>
-					<p> {blog.url} </p>
-					<p>
-						Likes: {blog.likes}
-						<button onClick={addLike}>like</button>
-					</p>
-					<p>{blog.user.username}</p>
-					<p>
-						<button onClick={deleteBlog}>delete</button>
-					</p>
-				</div>
-			)
-		}
+				</h3>
+				<p>
+					<a href={blog.url}>{blog.url}</a>
+				</p>
+				<p>
+					Likes: {blog.likes}
+					<button onClick={addLike}>like</button>
+				</p>
+				<p>{blog.user.username}</p>
+			</div>
+		)
+	}
+
+	const ownedBlog = () => {
+		return (
+			<div style={blogStyle}>
+				{blog.title} {blog.author}
+				<button onClick={() => setView(false)}>hide</button>
+				<p> {blog.url} </p>
+				<p>
+					Likes: {blog.likes}
+					<button onClick={addLike}>like</button>
+				</p>
+				<p>{blog.user.username}</p>
+				<p>
+					<button onClick={deleteBlog}>delete</button>
+				</p>
+			</div>
+		)
+	}
+
+	const notOwnedBlog = () => {
 		return (
 			<div style={blogStyle}>
 				{blog.title} {blog.author}
@@ -62,12 +86,26 @@ const Blog = ({receivedBlog}) => {
 			</div>
 		)
 	}
-	return (
-		<div style={blogStyle}>
-			{blog.title} {blog.author}
-			<button onClick={() => setView(true)}>view</button>
-		</div>
-	)
+
+	const smallView = () => {
+		return (
+			<div style={blogStyle}>
+				<Link style={padding} to={`/blogs/${blog.id}`}>
+					{blog.title} {blog.author}
+				</Link>
+				<button onClick={() => setView(true)}>view</button>
+			</div>
+		)
+	}
+
+	if (view) {
+		if (user.username === blog.user.username || user.id === blog.user.id) {
+			return ownedBlog()
+		}
+		return notOwnedBlog()
+	}
+
+	return smallView()
 }
 
 export default Blog
