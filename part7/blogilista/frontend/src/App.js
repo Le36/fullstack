@@ -12,7 +12,8 @@ import UserStatList from './components/UserStatList'
 import {initializeStats} from './reducers/statsReducer'
 import {Route, Routes, useMatch} from 'react-router-dom'
 import UserView from './components/UserView'
-import BlogView from "./components/BlogView";
+import BlogView from './components/BlogView'
+import NavMenu from './components/NavMenu'
 
 const App = () => {
 	const dispatch = useDispatch()
@@ -44,12 +45,9 @@ const App = () => {
 
 	return (
 		<div>
+			<NavMenu user={user} />
 			<h2>blogs</h2>
 			<Notification />
-			<p>
-				{user.name} logged in
-				<button onClick={() => logoutButton()}>logout</button>
-			</p>
 			<Routes>
 				<Route path="/blogs/:id" element={<BlogView id={blogMatch ? blogMatch.params.id : null} />} />
 				<Route path="/users/:id" element={<UserView id={userMatch ? userMatch.params.id : null} />} />

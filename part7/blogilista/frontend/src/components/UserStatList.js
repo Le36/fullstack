@@ -6,7 +6,9 @@ import {initializeStats} from '../reducers/statsReducer'
 const UserStatList = () => {
 	const dispatch = useDispatch()
 
-	dispatch(initializeStats())
+	useEffect(() => {
+		dispatch(initializeStats())
+	}, [])
 
 	const stats = useSelector((state) => state.stats)
 	const list = [...stats]

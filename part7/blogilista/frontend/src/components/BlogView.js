@@ -1,25 +1,22 @@
-import {useSelector} from "react-redux";
-import Blog from "./Blog";
+import {useSelector} from 'react-redux'
+import Blog from './Blog'
 
 const BlogView = ({id}) => {
+	const blogs = useSelector((state) => state.blogs)
+	if (!blogs) return null
+	const list = [...blogs]
 
-    const blogs = useSelector((state) => state.blogs)
-    if (!blogs) return null
-    console.log(blogs)
-    const list = [...blogs]
+	const blog = list.find((s) => s.id === id)
+	if (!blog) {
+		return <>invalid id</>
+	}
 
-    const blog = list.find((s) => s.id === id)
-    if (!blog) {
-        return <>invalid id</>
-    }
-
-    return (
-        <div>
-            <h2>blog: {blog.title}</h2>
-            <Blog receivedBlog={blog} singleView={true}/>
-
-        </div>
-    )
+	return (
+		<div>
+			<h2>blog: {blog.title}</h2>
+			<Blog receivedBlog={blog} singleView={true} />
+		</div>
+	)
 }
 
 export default BlogView
