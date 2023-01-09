@@ -1,6 +1,4 @@
 import {createSlice} from '@reduxjs/toolkit'
-import blogService from '../services/blogService'
-import {addLike} from './blogReducer'
 import userService from '../services/userService'
 
 const initialState = ''
@@ -12,13 +10,13 @@ const statsSlice = createSlice({
 		addStats(state, action) {
 			return (state = action.payload)
 		},
-		removeStats(state) {
+		updateStats(state) {
 			return (state = null)
 		},
 	},
 })
 
-export const {addStats, removeStats} = statsSlice.actions
+export const {addStats, updateStats} = statsSlice.actions
 
 export const initializeStats = (value) => {
 	return async (dispatch) => {
@@ -27,9 +25,9 @@ export const initializeStats = (value) => {
 	}
 }
 
-export const emptyStats = (value) => {
+export const newStats = (value) => {
 	return (dispatch) => {
-		dispatch(removeStats(value))
+		dispatch(updateStats(value))
 	}
 }
 
