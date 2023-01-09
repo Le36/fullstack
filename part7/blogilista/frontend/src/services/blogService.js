@@ -29,7 +29,7 @@ const update = (newObject) => {
 		title: newObject.title,
 		url: newObject.url,
 		_id: newObject.id,
-		comments: newObject.comments
+		comments: newObject.comments,
 	}
 	const request = axios.put(`${baseUrl}/${newObject.id}`, properFormat)
 	return request.then((response) => response.data)
@@ -44,5 +44,13 @@ const remove = async (newObject) => {
 	return request.data
 }
 
-const blogService = {getAll, create, setToken, update, remove}
+const comment = (blog, comment) => {
+	const sendForm = {
+		comment: comment,
+	}
+	const request = axios.post(`${baseUrl}/${blog.id}`, sendForm)
+	return request.then((response) => response.data)
+}
+
+const blogService = {getAll, create, setToken, update, remove, comment}
 export default blogService

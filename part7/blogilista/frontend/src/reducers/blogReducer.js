@@ -20,10 +20,15 @@ const blogSlice = createSlice({
 		removeOne(state, action) {
 			return state.filter((blog) => blog.id !== action.payload.id)
 		},
+		newComment(state, action) {
+			const updatedBlog = action.payload
+			const idOfUpdated = action.payload.id
+			return state.map((a) => (a.id !== idOfUpdated ? a : updatedBlog))
+		},
 	},
 })
 
-export const {addLike, setBlogs, appendBlog, removeOne} = blogSlice.actions
+export const {addLike, setBlogs, appendBlog, removeOne, newComment} = blogSlice.actions
 
 export const initializeBlogs = () => {
 	return async (dispatch) => {
@@ -48,6 +53,18 @@ export const likeBlog = (blog) => {
 	return async (dispatch) => {
 		const likedBlog = await blogService.update(blog)
 		dispatch(addLike(likedBlog))
+	}
+}
+
+export const addComment = (blog, comment) => {
+	return async (dispatch) => {
+		try {
+			const res = await blogService.comment(blog, comment)
+			dispatch(newComment(res))
+			dispatch(setNotification('successfully sent comment!', 5))
+		} catch (exception) {
+			dispatch(setNotification('failed to add comment!', 5))
+		}
 	}
 }
 
