@@ -10,24 +10,15 @@ const statsSlice = createSlice({
 		addStats(state, action) {
 			return (state = action.payload)
 		},
-		updateStats(state) {
-			return (state = null)
-		},
 	},
 })
 
-export const {addStats, updateStats} = statsSlice.actions
+export const {addStats} = statsSlice.actions
 
-export const initializeStats = (value) => {
+export const initializeStats = () => {
 	return async (dispatch) => {
 		const allStats = await userService.getAll()
 		dispatch(addStats(allStats))
-	}
-}
-
-export const newStats = (value) => {
-	return (dispatch) => {
-		dispatch(updateStats(value))
 	}
 }
 

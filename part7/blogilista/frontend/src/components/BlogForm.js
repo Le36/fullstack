@@ -2,6 +2,7 @@ import {useState} from 'react'
 import PropTypes from 'prop-types'
 import {useDispatch} from 'react-redux'
 import {createBlog} from '../reducers/blogReducer'
+import {Button} from '@mui/material'
 
 const BlogForm = ({toggleVisibility}) => {
 	const dispatch = useDispatch()
@@ -49,7 +50,9 @@ const BlogForm = ({toggleVisibility}) => {
 						placeholder="url here"
 					/>
 				</p>
-				<button type="submit">save</button>
+				<Button variant="outlined" type="submit">
+					save
+				</Button>
 			</form>
 		</>
 	)

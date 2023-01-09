@@ -1,6 +1,7 @@
 import {Link} from 'react-router-dom'
 import {removeUser} from '../reducers/userReducer'
 import {useDispatch} from 'react-redux'
+import {Button} from '@mui/material'
 
 const NavMenu = ({user}) => {
 	const dispatch = useDispatch()
@@ -24,7 +25,9 @@ const NavMenu = ({user}) => {
 				users
 			</Link>
 			{user.name} logged in
-			<button onClick={() => logoutButton()}>logout</button>
+			<Button variant="outlined" onClick={() => logoutButton()}>
+				logout
+			</Button>
 		</div>
 	)
 }

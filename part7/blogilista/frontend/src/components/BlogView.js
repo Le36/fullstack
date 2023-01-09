@@ -1,6 +1,6 @@
 import {useSelector} from 'react-redux'
 import Blog from './Blog'
-import Comments from "./Comments";
+import Comments from './Comments'
 
 const BlogView = ({id}) => {
 	const blogs = useSelector((state) => state.blogs)
@@ -16,7 +16,7 @@ const BlogView = ({id}) => {
 		<div>
 			<h2>blog: {blog.title}</h2>
 			<Blog receivedBlog={blog} singleView={true} />
-			<Comments blog={blog}/>
+			<Comments blog={blog} />
 		</div>
 	)
 }

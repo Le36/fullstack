@@ -2,6 +2,7 @@ import {useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {likeBlog, removeBlog} from '../reducers/blogReducer'
 import {Link} from 'react-router-dom'
+import {Button} from '@mui/material'
 
 const Blog = ({receivedBlog, singleView}) => {
 	const dispatcher = useDispatch()
@@ -47,7 +48,9 @@ const Blog = ({receivedBlog, singleView}) => {
 				</p>
 				<p>
 					Likes: {blog.likes}
-					<button onClick={addLike}>like</button>
+					<Button variant="outlined" onClick={addLike}>
+						like
+					</Button>
 				</p>
 				<p>{blog.user.username}</p>
 			</div>
@@ -58,15 +61,21 @@ const Blog = ({receivedBlog, singleView}) => {
 		return (
 			<div style={blogStyle}>
 				{blog.title} {blog.author}
-				<button onClick={() => setView(false)}>hide</button>
+				<Button variant="outlined" onClick={() => setView(false)}>
+					hide
+				</Button>
 				<p> {blog.url} </p>
 				<p>
 					Likes: {blog.likes}
-					<button onClick={addLike}>like</button>
+					<Button variant="outlined" onClick={addLike}>
+						like
+					</Button>
 				</p>
 				<p>{blog.user.username}</p>
 				<p>
-					<button onClick={deleteBlog}>delete</button>
+					<Button variant="outlined" onClick={deleteBlog}>
+						delete
+					</Button>
 				</p>
 			</div>
 		)
@@ -76,11 +85,15 @@ const Blog = ({receivedBlog, singleView}) => {
 		return (
 			<div style={blogStyle}>
 				{blog.title} {blog.author}
-				<button onClick={() => setView(false)}>hide</button>
+				<Button variant="outlined" onClick={() => setView(false)}>
+					hide
+				</Button>
 				<p> {blog.url} </p>
 				<p>
 					Likes: {blog.likes}
-					<button onClick={addLike}>like</button>
+					<Button variant="outlined" onClick={addLike}>
+						like
+					</Button>
 				</p>
 				<p>{blog.user.username}</p>
 			</div>
@@ -93,7 +106,9 @@ const Blog = ({receivedBlog, singleView}) => {
 				<Link style={padding} to={`/blogs/${blog.id}`}>
 					{blog.title} {blog.author}
 				</Link>
-				<button onClick={() => setView(true)}>view</button>
+				<Button variant="outlined" onClick={() => setView(true)}>
+					view
+				</Button>
 			</div>
 		)
 	}

@@ -3,6 +3,7 @@
 .container {
     width: 400px;
     padding: 10px;
+    height: 4em;
 }
 
 .message-orange {

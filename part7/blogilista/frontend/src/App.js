@@ -7,13 +7,13 @@ import Notification from './components/Notification'
 import {useDispatch, useSelector} from 'react-redux'
 import {initializeBlogs} from './reducers/blogReducer'
 import LoginForm from './components/LoginForm'
-import {removeUser} from './reducers/userReducer'
 import UserStatList from './components/UserStatList'
 import {initializeStats} from './reducers/statsReducer'
 import {Route, Routes, useMatch} from 'react-router-dom'
 import UserView from './components/UserView'
 import BlogView from './components/BlogView'
 import NavMenu from './components/NavMenu'
+import {Container} from '@mui/material'
 
 const App = () => {
 	const dispatch = useDispatch()
@@ -29,42 +29,41 @@ const App = () => {
 		dispatch(initializeStats())
 	}, [dispatch])
 
-	const logoutButton = () => {
-		window.localStorage.clear()
-		dispatch(removeUser(user))
-	}
-
 	if (!user) {
 		return (
 			<div>
-				<Notification />
-				<LoginForm />
+				<Container>
+					<Notification />
+					<LoginForm />
+				</Container>
 			</div>
 		)
 	}
 
 	return (
-		<div>
-			<NavMenu user={user} />
-			<h2>blogs</h2>
-			<Notification />
-			<Routes>
-				<Route path="/blogs/:id" element={<BlogView id={blogMatch ? blogMatch.params.id : null} />} />
-				<Route path="/users/:id" element={<UserView id={userMatch ? userMatch.params.id : null} />} />
-				<Route path="/users" element={<UserStatList />} />
-				<Route
-					path=""
-					element={
-						<>
-							<Togglable buttonLabel={'new blog'}>
-								{({toggleVisibility}) => <BlogForm toggleVisibility={toggleVisibility} />}
-							</Togglable>
-							<BlogList />
-						</>
-					}
-				/>
-			</Routes>
-		</div>
+		<Container>
+			<div>
+				<NavMenu user={user} />
+				<h2>blogs</h2>
+				<Notification />
+				<Routes>
+					<Route path="/blogs/:id" element={<BlogView id={blogMatch ? blogMatch.params.id : null} />} />
+					<Route path="/users/:id" element={<UserView id={userMatch ? userMatch.params.id : null} />} />
+					<Route path="/users" element={<UserStatList />} />
+					<Route
+						path=""
+						element={
+							<>
+								<Togglable buttonLabel={'new blog'}>
+									{({toggleVisibility}) => <BlogForm toggleVisibility={toggleVisibility} />}
+								</Togglable>
+								<BlogList />
+							</>
+						}
+					/>
+				</Routes>
+			</div>
+		</Container>
 	)
 }
 

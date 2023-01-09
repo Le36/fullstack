@@ -1,6 +1,7 @@
 import {useState} from 'react'
 import {useDispatch} from 'react-redux'
 import {addComment} from '../reducers/blogReducer'
+import {Button} from '@mui/material'
 
 const Comments = ({blog}) => {
 	const [comment, setComment] = useState('')
@@ -20,7 +21,9 @@ const Comments = ({blog}) => {
 			<h2>comments</h2>
 			<form onSubmit={onSubmitComment}>
 				<input value={comment} onChange={(event) => handleCommentChange(event)} />
-				<button type="submit">add comment</button>
+				<Button variant="outlined" type="submit">
+					add comment
+				</Button>
 			</form>
 			<ul>
 				{list.map((comment, i) => {
