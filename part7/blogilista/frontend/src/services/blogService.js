@@ -29,6 +29,7 @@ const update = (newObject) => {
 		title: newObject.title,
 		url: newObject.url,
 		_id: newObject.id,
+		comments: newObject.comments
 	}
 	const request = axios.put(`${baseUrl}/${newObject.id}`, properFormat)
 	return request.then((response) => response.data)
