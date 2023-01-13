@@ -5,7 +5,7 @@ import {useState} from "react";
 const Books = (props) => {
     const [selectedGenre, setGenre] = useState(null)
     const result = useQuery(ALL_BOOKS)
-    const genreResult = useQuery(FIND_GENRES, {
+    const {loading, data, refetch} = useQuery(FIND_GENRES, {
         variables: {selectedGenre},
         skip: !selectedGenre
     })
@@ -14,7 +14,7 @@ const Books = (props) => {
         return null
     }
 
-    if (result.loading || genreResult.loading) {
+    if (result.loading || loading) {
         return <div>loading...</div>
     }
 
@@ -24,19 +24,24 @@ const Books = (props) => {
     books.map(b => b.genres.map(g => uniqueGenres.add(g)))
     const filteredGenres = [...uniqueGenres]
 
+    const onClickRefetch = (genre) => {
+        setGenre(genre)
+        if (genre) refetch({selectedGenre: genre})
+    }
+
     const GenreButtons = () => {
         return (
             <div>
                 {filteredGenres.map(g => {
-                    return <button key={g} onClick={() => setGenre(g)}>{g}</button>
+                    return <button key={g} onClick={() => onClickRefetch(g)}>{g}</button>
                 })}
-                <button onClick={() => setGenre(null)}>all genres</button>
+                <button onClick={() => onClickRefetch(null)}>all genres</button>
             </div>
         )
     }
 
-    if (selectedGenre && genreResult.data) {
-        const genreBooks = genreResult.data.allBooks
+    if (selectedGenre && data) {
+        const genreBooks = data.allBooks
 
         return (
             <div>
