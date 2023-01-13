@@ -10,7 +10,6 @@ const Books = (props) => {
         skip: !selectedGenre
     })
 
-
     if (!props.show) {
         return null
     }
@@ -42,6 +41,7 @@ const Books = (props) => {
         return (
             <div>
                 <h2>books</h2>
+                in genre <b>{selectedGenre}</b>
                 <table>
                     <tbody>
                     <tr>

@@ -26,6 +26,14 @@ export const ALL_BOOKS = gql`
     }
 `
 
+export const MY_GENRE = gql`
+    query {
+        me {
+            favoriteGenre
+        }
+    }
+`
+
 export const FIND_GENRES = gql`
     query findByGenres($selectedGenre: String!){
         allBooks(genre: $selectedGenre) {
