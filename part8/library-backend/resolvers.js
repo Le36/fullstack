@@ -25,10 +25,7 @@ const resolvers = {
         }
     },
     Author: {
-        bookCount: async ({name}) => {
-            const author = await Author.findOne({name: name})
-            return Book.find({author: author.id}).countDocuments();
-        }
+        bookCount: async (message, args, {loaders}) => loaders.count.load(message.id)
     },
     Mutation: {
         addBook: async (root, args, context) => {

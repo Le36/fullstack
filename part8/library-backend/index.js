@@ -16,7 +16,8 @@ const resolvers = require("./resolvers");
 
 const MONGODB_URI = process.env.MONGODB_URI
 const JWT_SECRET = process.env.SECRET
-
+const DataLoader = require("dataloader");
+const loader = require('./loaders/authorCount');
 console.log('connecting to', MONGODB_URI)
 
 mongoose.connect(MONGODB_URI)
@@ -46,7 +47,16 @@ const start = async () => {
             if (auth && auth.toLowerCase().startsWith('bearer ')) {
                 const decodedToken = jwt.verify(auth.substring(7), JWT_SECRET)
                 const currentUser = await User.findById(decodedToken.id)
-                return {currentUser}
+                return {
+                    currentUser, loaders: {
+                        count: new DataLoader(keys => loader(keys))
+                    }
+                }
+            }
+            return {
+                loaders: {
+                    count: new DataLoader(keys => loader(keys))
+                }
             }
         },
         plugins: [
