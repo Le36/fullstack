@@ -14,15 +14,15 @@ interface ResultObject {
 }
 
 const calculateExercises = (target: number, data: Array<number>): ResultObject => {
-    let results: ResultObject = new class implements ResultObject {
-        periodLength: number;
-        trainingDays: number;
-        success: boolean;
-        rating: number;
-        ratingDescription: string;
-        target: number;
-        average: number;
-    }
+    const results: ResultObject = {
+        periodLength: 0,
+        trainingDays: 0,
+        success: false,
+        rating: 0,
+        ratingDescription: "",
+        target: 0,
+        average: 0
+    };
 
     results.periodLength = data.length;
     results.trainingDays = data.filter(n => n != 0).length;
@@ -44,7 +44,7 @@ const calculateExercises = (target: number, data: Array<number>): ResultObject =
     results.average = average;
 
     return results;
-}
+};
 
 const parseArgs = (args: Array<string>): ExerciseInput => {
     if (args.length < 4) throw new Error('Not enough arguments');
@@ -57,21 +57,21 @@ const parseArgs = (args: Array<string>): ExerciseInput => {
             if (isNaN(Number(args[i]))) {
                 throw new Error('Provided values were not numbers!');
             } else {
-                exercises.push(Number(args[i]))
+                exercises.push(Number(args[i]));
             }
         }
         return {
             value1: Number(args[2]),
             value2: exercises
-        }
+        };
     }
-}
+};
 
 try {
     const {value1, value2} = parseArgs(process.argv);
     console.log(calculateExercises(value1, value2));
 } catch (error: unknown) {
-    let errorMessage = 'Something bad happened.'
+    let errorMessage = 'Something bad happened.';
     if (error instanceof Error) {
         errorMessage += ' Error: ' + error.message;
     }
