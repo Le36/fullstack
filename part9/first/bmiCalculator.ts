@@ -3,7 +3,7 @@ interface HeightAndWeight {
     value2: number;
 }
 
-const calculateBmi = (height: number, weight: number): string => {
+export const calculateBmi = (height: number, weight: number): string => {
     const bmi = weight / height / height * 10000;
 
     if (bmi > 25) {
