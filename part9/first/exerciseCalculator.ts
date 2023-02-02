@@ -13,7 +13,7 @@ interface ResultObject {
     average: number;
 }
 
-const calculateExercises = (target: number, data: Array<number>): ResultObject => {
+export const calculateExercises = (target: number, data: Array<number>): ResultObject => {
     const results: ResultObject = {
         periodLength: 0,
         trainingDays: 0,
